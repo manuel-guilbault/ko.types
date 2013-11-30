@@ -1,0 +1,31 @@
+﻿{
+    "name": "ko.types",
+    "version": "0.1.0",
+    "author": "Manuel Guilbault (https://github.com/manuel-guilbault)",
+    "description": "A knockout plugin for restricting observables types and bind observables for automatic value type conversion.",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/manuel-guilbault/ko.types"
+    },
+    "keywords": [
+        "knockout",
+        "type",
+        "convert"
+    ],
+    "files": [
+        "dist/ko.types.debug.js",
+        "dist/ko.types.js"
+    ],
+    "devDependencies": {
+        "grunt": "~0.4.2",
+        "grunt-contrib-concat": "~0.1.2",
+        "grunt-contrib-uglify": "~0.2.2",
+        "grunt-contrib-jshint": "~0.6.3",
+        "grunt-contrib-jasmine": "~0.5.1",
+        "knockout": ">=2.0.0",
+        "knockout.validation": "~2.0.0",
+        "moment": ">=2.0.0",
+        "globalize": "~0.1.1"
+    },
+    "license": "MIT"
+}

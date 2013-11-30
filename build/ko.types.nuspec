@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>ko.types</id>
+    <version>0.1.0</version>
+    <authors>Manuel Guilbault</authors>
+    <licenseUrl>http://www.opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://github.com/manuel-guilbault/ko.types</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A knockout plugin for restricting observables types and bind observables for automatic value type conversion.</description>
+    <dependencies>
+      <dependency id="knockoutjs" version="3.0.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="dist\*.js" target="Content\Scripts" />
+  </files>
+</package>
