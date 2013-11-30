@@ -2,11 +2,11 @@
     message: "Invalid float value.",
     radix: 10,
     format: "n",
-    language: "en",
+    culture: "en",
     convertTo: function (value, options) {
         if (isEmpty(value)) return undefined;
 
-        value = Globalize.parseFloat(value, options.radix, options.language);
+        value = Globalize.parseFloat(value, options.radix, options.culture);
         if (isNaN(value)) {
             throw new TypeError("Invalid float value.");
         }
@@ -16,6 +16,6 @@
     convertFrom: function (value, options) {
         if (value === undefined || value === null) return "";
 
-        return Globalize.format(value, options.format, options.language);
+        return Globalize.format(value, options.format, options.culture);
     }
 });
