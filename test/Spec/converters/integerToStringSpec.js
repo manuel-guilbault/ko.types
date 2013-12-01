@@ -1,5 +1,17 @@
-﻿describe("string to integer converter tests", function () {
+﻿describe("integer to string converter tests", function () {
     describe("convert to", function () {
+        it("can convert null to string", function () {
+            expect(convertTo("integer", "string", null)).toBe("");
+        });
+        it("can convert undefined to string", function () {
+            expect(convertTo("integer", "string", undefined)).toBe("");
+        });
+        it("can convert integer to string", function () {
+            expect(convertTo("integer", "string", 12)).toBe("12");
+        });
+    });
+
+    describe("convert from", function () {
         it("can convert string to undefined", function () {
             expect(convertFrom("integer", "string", "")).toBe(undefined);
         });
@@ -18,18 +30,6 @@
             expect(function () {
                 convertFrom("integer", "string", "twelve");
             }).toThrow(new TypeError("Invalid integer value."));
-        });
-    });
-
-    describe("convert from", function () {
-        it("can convert null to string", function () {
-            expect(convertTo("integer", "string", null)).toBe("");
-        });
-        it("can convert undefined to string", function () {
-            expect(convertTo("integer", "string", undefined)).toBe("");
-        });
-        it("can convert integer to string", function () {
-            expect(convertTo("integer", "string", 12)).toBe("12");
         });
     });
 });

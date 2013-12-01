@@ -1,5 +1,20 @@
-﻿describe("string to number converter tests", function () {
+﻿describe("number to string converter tests", function () {
     describe("convert to", function () {
+        it("can convert null to string", function () {
+            expect(convertTo("number", "string", null)).toBe("");
+        });
+        it("can convert undefined to string", function () {
+            expect(convertTo("number", "string", undefined)).toBe("");
+        });
+        it("can convert number to string", function () {
+            expect(convertTo("number", "string", 12.2)).toBe("12.2");
+        });
+        it("can convert number to string with decimals", function () {
+            expect(convertTo("number", "string", 12.222, { decimals: 2 })).toBe("12.22");
+        });
+    });
+
+    describe("convert from", function () {
         it("can convert string to undefined", function () {
             expect(convertFrom("number", "string", "")).toBe(undefined);
         });
@@ -18,21 +33,6 @@
             expect(function () {
                 convertFrom("number", "string", "twelve");
             }).toThrow(new TypeError("Invalid number value."));
-        });
-    });
-
-    describe("convert from", function () {
-        it("can convert null to string", function () {
-            expect(convertTo("number", "string", null)).toBe("");
-        });
-        it("can convert undefined to string", function () {
-            expect(convertTo("number", "string", undefined)).toBe("");
-        });
-        it("can convert number to string", function () {
-            expect(convertTo("number", "string", 12.2)).toBe("12.2");
-        });
-        it("can convert number to string with decimals", function () {
-            expect(convertTo("number", "string", 12.222, { decimals: 2 })).toBe("12.22");
         });
     });
 });

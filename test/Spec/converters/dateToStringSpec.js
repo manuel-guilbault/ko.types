@@ -1,21 +1,5 @@
-﻿describe("string to date converter tests", function () {
+﻿describe("date to string converter tests", function () {
     describe("convert to", function () {
-        it("can convert string to undefined", function () {
-            var date = new Date();
-            expect(convertFrom("date", "string", "")).toBe(undefined);
-        });
-        it("can convert string to date", function () {
-            var date = new Date();
-            expect(convertFrom("date", "string", date.toString())).toBeDate(date);
-        });
-        it("cannot convert invalid string to date", function () {
-            expect(function () {
-                convertFrom("date", "string", "test");
-            }).toThrow(new TypeError("Invalid date value."));
-        });
-    });
-
-    describe("convert from", function () {
         it("can convert date to string (format: date)", function () {
             var date = new Date();
             expect(convertTo("date", "string", date, { format: "date" })).toBe(date.toDateString());
@@ -51,6 +35,22 @@
         it("can convert date to string (format: default)", function () {
             var date = new Date();
             expect(convertTo("date", "string", date, { format: "default" })).toBe(date.toString());
+        });
+    });
+
+    describe("convert from", function () {
+        it("can convert string to undefined", function () {
+            var date = new Date();
+            expect(convertFrom("date", "string", "")).toBe(undefined);
+        });
+        it("can convert string to date", function () {
+            var date = new Date();
+            expect(convertFrom("date", "string", date.toString())).toBeDate(date);
+        });
+        it("cannot convert invalid string to date", function () {
+            expect(function () {
+                convertFrom("date", "string", "test");
+            }).toThrow(new TypeError("Invalid date value."));
         });
     });
 });

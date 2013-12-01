@@ -1,5 +1,20 @@
-﻿describe("string to boolean converter tests", function () {
+﻿describe("boolean to string converter tests", function () {
     describe("convert to", function () {
+        it("can convert null to string", function () {
+            expect(convertTo("boolean", "string", null)).toBe("");
+        });
+        it("can convert undefined to string", function () {
+            expect(convertTo("boolean", "string", undefined)).toBe("");
+        });
+        it("can convert true to string", function () {
+            expect(convertTo("boolean", "string", true)).toBe("true");
+        });
+        it("can convert false to string", function () {
+            expect(convertTo("boolean", "string", false)).toBe("false");
+        });
+    });
+
+    describe("convert from", function () {
         it("can convert string to undefined (strict)", function () {
             expect(convertFrom("boolean", "string", "", { "strict": true })).toBe(undefined);
         });
@@ -19,21 +34,6 @@
             expect(function () {
                 convertFrom("boolean", "string", "test", { "strict": true });
             }).toThrow(new TypeError("Invalid boolean value."));
-        });
-    });
-
-    describe("convert from", function () {
-        it("can convert null to string", function () {
-            expect(convertTo("boolean", "string", null)).toBe("");
-        });
-        it("can convert undefined to string", function () {
-            expect(convertTo("boolean", "string", undefined)).toBe("");
-        });
-        it("can convert true to string", function () {
-            expect(convertTo("boolean", "string", true)).toBe("true");
-        });
-        it("can convert false to string", function () {
-            expect(convertTo("boolean", "string", false)).toBe("false");
         });
     });
 });

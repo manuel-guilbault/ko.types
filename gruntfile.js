@@ -55,8 +55,9 @@
                 vendor: [
                     "node_modules/knockout/build/output/knockout-latest.js",
                     "node_modules/knockout.validation/Dist/knockout.validation.js",
-                    "node_modules/moment/moment.js",
-                    "node_modules/globalize/dist/globalize.min.js"
+                    "node_modules/moment/min/moment-with-langs.js",
+                    "node_modules/globalize/lib/globalize.js",
+                    "node_modules/globalize/lib/cultures/globalize.cultures.js"
                 ],
                 helpers: [
                     "test/convertHelper.js",
@@ -65,7 +66,7 @@
                 specs: ["test/Spec/**/*Spec.js"]
             },
             build: {
-                src: ["<%= uglify.build.dest %>"]
+                src: ["<%= concat.build.dest %>"]
             }
         }
     });
