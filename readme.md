@@ -36,4 +36,4 @@ strictStringWrapper('12 !!!'); // update is not propagated, because strict parsi
 strictStringWrapper('12'); // intValue() = 12
 ```
 
-Check the [wiki](wiki) for more.
+Check the [wiki](https://github.com/manuel-guilbault/ko.types/wiki) for more.
