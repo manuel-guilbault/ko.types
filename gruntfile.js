@@ -75,7 +75,6 @@
     grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-jasmine");
-    grunt.loadNpmTasks("grunt-nuget");
 
     grunt.registerTask("prepare", "Prepare the build", function () {
         grunt.file.mkdir(workingDir);
