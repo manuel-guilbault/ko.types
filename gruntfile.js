@@ -100,22 +100,14 @@
         ], this.async());
     });
     grunt.registerTask("nugetPush", "Publish a NuGet package", function () {
+        var args = ["push", "dist\\*.nupkg"];
+
         var apiKey = grunt.option("apiKey");
-        if (!apiKey) {
-            grunt.log.error("apiKey option is missing");
-            return;
+        if (apiKey) {
+            args = args.concat(["-ApiKey", apiKey]);
         }
 
-        execCmd("nuget.exe", [
-            //specify the .nuspec file
-            "push", "dist/*.nupkg",
-
-            //specify the API key
-            "-ApiKey", apiKey,
-
-            //override the version with whatever is currently defined in package.json
-            "-Version", grunt.config.get("pkg").version
-        ], this.async());
+        execCmd("nuget.exe", args, this.async());
     });
     grunt.registerTask("npmPush", "Publish a NPM package", function () {
         execCmd("cmd.exe", ["/C", "npm", "publish"], this.async());

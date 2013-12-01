@@ -4,3 +4,4 @@ obj
 *.csproj.user
 *.suo
 *.nupkg
+*.log

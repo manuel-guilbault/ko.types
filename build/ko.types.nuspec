@@ -9,7 +9,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A knockout plugin for restricting observables types and bind observables for automatic value type conversion.</description>
     <dependencies>
-      <dependency id="knockoutjs" version="3.0.0" />
+      <dependency id="knockoutjs" version="2.0.0" />
     </dependencies>
   </metadata>
   <files>
