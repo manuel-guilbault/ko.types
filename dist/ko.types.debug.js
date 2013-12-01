@@ -1,5 +1,5 @@
 /*
-*   ko.types 0.1.0 (2013-11-30)
+*   ko.types 0.1.0 (2013-12-01)
 *   Created by Manuel Guilbault (https://github.com/manuel-guilbault)
 *
 *   Source: https://github.com/manuel-guilbault/ko.types
@@ -119,10 +119,13 @@ exports.addType("number", function (value) {
 exports.addType("string", function (value) {
     return value === null || value === undefined || typeof value === "string";
 });
-exports.addConverter("string", "boolean", {
+exports.addConverter("boolean", "string", {
     strict: false,
     message: "Invalid boolean value.",
     convertTo: function (value, options) {
+        return value !== undefined && value !== null ? value.toString() : "";
+    },
+    convertFrom: function (value, options) {
         if (options.strict) {
             if (isEmpty(value)) return undefined;
 
@@ -134,9 +137,6 @@ exports.addConverter("string", "boolean", {
         } else {
             return !!value;
         }
-    },
-    convertFrom: function (value, options) {
-        return value !== undefined && value !== null ? value.toString() : "";
     }
 });
 (function () {
@@ -151,10 +151,16 @@ exports.addConverter("string", "boolean", {
         "utc": "toUTCString",
         "default": "toString"
     };
-    exports.addConverter("string", "date", {
+    exports.addConverter("date", "string", {
         message: "Invalid date value.",
         format: "default",
         convertTo: function (value, options) {
+            if (value === undefined || value === null) return "";
+
+            var method = formats[options.format];
+            return value[method]();
+        },
+        convertFrom: function (value, options) {
             if (isEmpty(value)) return undefined;
 
             value = new Date(value);
@@ -163,60 +169,58 @@ exports.addConverter("string", "boolean", {
             }
 
             return value;
-        },
-        convertFrom: function (value, options) {
-            if (value === undefined || value === null) return "";
-
-            var method = formats[options.format];
-            return value[method]();
         }
     });
 })();
-exports.addConverter("string", "globalized-date", {
+exports.addConverter("globalized-date", "string", {
     message: "Invalid date value.",
     format: "d",
+    culture: "en",
     convertTo: function (value, options) {
+        if (value === undefined || value === null) return '';
+
+        return Globalize.format(value, options.format, options.culture);
+    },
+    convertFrom: function (value, options) {
         if (isEmpty(value)) return undefined;
 
-        value = Globalize.parseDate(value, options.format, options.language);
+        value = Globalize.parseDate(value, options.format, options.culture);
         if (isNaN(value.valueOf())) {
             throw new TypeError('Invalid date value.');
         }
 
         return value;
-    },
-    convertFrom: function (value, options) {
-        if (value === undefined || value === null) return '';
-
-        return Globalize.format(value, options.format, options.language);
     }
 });
-exports.addConverter("string", "globalized-number", {
+exports.addConverter("globalized-number", "string", {
     message: "Invalid float value.",
     radix: 10,
     format: "n",
-    language: "en",
+    culture: "en",
     convertTo: function (value, options) {
+        if (value === undefined || value === null) return "";
+
+        return Globalize.format(value, options.format, options.culture);
+    },
+    convertFrom: function (value, options) {
         if (isEmpty(value)) return undefined;
 
-        value = Globalize.parseFloat(value, options.radix, options.language);
+        value = Globalize.parseFloat(value, options.radix, options.culture);
         if (isNaN(value)) {
             throw new TypeError("Invalid float value.");
         }
 
         return value;
-    },
-    convertFrom: function (value, options) {
-        if (value === undefined || value === null) return "";
-
-        return Globalize.format(value, options.format, options.language);
     }
 });
-exports.addConverter("string", "integer", {
+exports.addConverter("integer", "string", {
     strict: false,
     //TODO implement radix
     message: "Invalid integer value.",
     convertTo: function (value, options) {
+        return value !== undefined && value !== null ? value.toString() : "";
+    },
+    convertFrom: function (value, options) {
         if (isEmpty(value)) return undefined;
 
         if (options.strict && !/^\s*[0-9]+\s*$/.test(value)) {
@@ -229,17 +233,19 @@ exports.addConverter("string", "integer", {
         }
 
         return value;
-    },
-    convertFrom: function (value, options) {
-        return value !== undefined && value !== null ? value.toString() : "";
     }
 });
-exports.addConverter("string", "moment", {
+exports.addConverter("moment", "string", {
     strict: false,
     language: "en",
     format: "L",
     message: "Invalid date/time value.",
     convertTo: function (value, options) {
+        if (value === undefined || value === null) return "";
+
+        return moment(value).lang(options.language).format(options.format);
+    },
+    convertFrom: function (value, options) {
         if (isEmpty(value)) return undefined;
 
         var result = moment(value, options.format, options.language, options.strict);
@@ -247,18 +253,18 @@ exports.addConverter("string", "moment", {
             throw new TypeError("Invalid moment value.");
         }
         return result;
-    },
-    convertFrom: function (value, options) {
-        if (value === undefined || value === null) return "";
-
-        return moment(value).lang(options.language).format(options.format);
     }
 });
-exports.addConverter("string", "number", {
+exports.addConverter("number", "string", {
     strict: false,
     message: "Invalid number value.",
     decimals: 0,
     convertTo: function (value, options) {
+        if (value === undefined || value === null) return "";
+
+        return options.decimals > 0 ? value.toFixed(options.decimals) : value.toString();
+    },
+    convertFrom: function (value, options) {
         if (isEmpty(value)) return undefined;
 
         if (options.strict && !/^\s*[0-9]+(\.[0-9]+)?\s*$/.test(value)) {
@@ -271,11 +277,6 @@ exports.addConverter("string", "number", {
         }
 
         return value;
-    },
-    convertFrom: function (value, options) {
-        if (value === undefined || value === null) return "";
-
-        return options.decimals > 0 ? value.toFixed(options.decimals) : value.toString();
     }
 });
 /**
@@ -323,12 +324,12 @@ ko.extenders.convert = function (target, settings) {
     }
     options = ko.utils.extend(baseOptions, options);
 
-    var converted = ko.observable(options.convertFrom(target(), options));
+    var converted = ko.observable(options.convertTo(target(), options));
     converted.subscribe(function (value) {
         var isValid = true;
         
         try {
-            value = options.convertTo(value, options);
+            value = options.convertFrom(value, options);
             event = undefined;
         } catch (error) {
             isValid = false;
@@ -352,7 +353,7 @@ ko.extenders.convert = function (target, settings) {
             validation: {
                 validator: function (value) {
                     try {
-                        options.convertTo(value, options);
+                        options.convertFrom(value, options);
                         return true;
                     } catch (e) {
                         return false;

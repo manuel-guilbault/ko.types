@@ -13,27 +13,25 @@ License: [MIT](http://www.opensource.org/licenses/mit-license.php)
 ##Getting Started
 ```javascript
 //enforce an observable's value type
-var intValue = ko.observable(1).extend({ type: 'integer' });
+var intValue = ko.observable(1).extend({ type: "integer" });
 intValue(12); // intValue() = 12
-intValue('test'); // throws a TypeError exception
+intValue("test"); // throws a TypeError exception
 
 //create a string converter bound to a type-safe observable
-var stringWrapper = intValue.extend({ convert: 'string' });
-//or
-var stringWrapper = intValue.extend({ convert: { toType: 'string' } });
+var stringWrapper = intValue.extend({ convert: "string" });
 
 //read converted value
 intValue(99);
-stringWrapper(); // gives '99'
+stringWrapper(); // returns "99"
 
 //write converted value
-stringWrapper('test'); // update is not propagated, because 'test' is invalid
+stringWrapper("test"); // update is not propagated, because "test" is invalid
 stringWrapper('12!!!'); // intValue() = 12
 
 //create a string converter bound to a type-save observable, using strict parsing
-var strictStringWrapper = intValue.extend({ convert: { toType: 'string', strict: true } });
-strictStringWrapper('12 !!!'); // update is not propagated, because strict parsing is enabled
-strictStringWrapper('12'); // intValue() = 12
+var strictStringWrapper = intValue.extend({ convert: { toType: "string", strict: true } });
+strictStringWrapper("12 !!!"); // update is not propagated, because strict parsing is enabled
+strictStringWrapper("12"); // intValue() = 12
 ```
 
 Check the [wiki](https://github.com/manuel-guilbault/ko.types/wiki) for more.

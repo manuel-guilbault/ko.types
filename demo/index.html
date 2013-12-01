@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script type="text/javascript" src="../node_modules/knockout/build/output/knockout-latest.js"></script>
+    <script type="text/javascript" src="../node_modules/knockout.validation/Dist/knockout.validation.js"></script>
+    <script type="text/javascript" src="../node_modules/moment/min/moment-with-langs.min.js"></script>
+    <script type="text/javascript" src="../node_modules/globalize/dist/globalize.min.js"></script>
+    <script type="text/javascript" src="../node_modules/globalize/lib/cultures/globalize.culture.en-US.js"></script>
+    <script type="text/javascript" src="../node_modules/globalize/lib/cultures/globalize.culture.fr-FR.js"></script>
+    <script type="text/javascript" src="../dist/ko.types.debug.js"></script>
+</head>
+<body>
+    <input type="text" style="width:500px;" data-bind="value: input" />
+    <div>
+        Underlying value: <span data-bind="text: value"></span>
+    </div>
+
+    <script type="text/javascript">
+        var viewModel = {
+            value: ko.observable(new Date()).extend({ type: "date" })
+        };
+        viewModel.input = viewModel.value.extend({ convert: { fromType: "globalized-date", toType: "string", format: "F" } });
+
+        ko.applyBindings(viewModel);
+    </script>
+</body>
+</html>

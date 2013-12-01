@@ -1,8 +1,11 @@
-﻿exports.addConverter("string", "integer", {
+﻿exports.addConverter("integer", "string", {
     strict: false,
     //TODO implement radix
     message: "Invalid integer value.",
     convertTo: function (value, options) {
+        return value !== undefined && value !== null ? value.toString() : "";
+    },
+    convertFrom: function (value, options) {
         if (isEmpty(value)) return undefined;
 
         if (options.strict && !/^\s*[0-9]+\s*$/.test(value)) {
@@ -15,8 +18,5 @@
         }
 
         return value;
-    },
-    convertFrom: function (value, options) {
-        return value !== undefined && value !== null ? value.toString() : "";
     }
 });

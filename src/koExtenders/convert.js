@@ -43,12 +43,12 @@ ko.extenders.convert = function (target, settings) {
     }
     options = ko.utils.extend(baseOptions, options);
 
-    var converted = ko.observable(options.convertFrom(target(), options));
+    var converted = ko.observable(options.convertTo(target(), options));
     converted.subscribe(function (value) {
         var isValid = true;
         
         try {
-            value = options.convertTo(value, options);
+            value = options.convertFrom(value, options);
             event = undefined;
         } catch (error) {
             isValid = false;
@@ -72,7 +72,7 @@ ko.extenders.convert = function (target, settings) {
             validation: {
                 validator: function (value) {
                     try {
-                        options.convertTo(value, options);
+                        options.convertFrom(value, options);
                         return true;
                     } catch (e) {
                         return false;

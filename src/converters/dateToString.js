@@ -10,10 +10,16 @@
         "utc": "toUTCString",
         "default": "toString"
     };
-    exports.addConverter("string", "date", {
+    exports.addConverter("date", "string", {
         message: "Invalid date value.",
         format: "default",
         convertTo: function (value, options) {
+            if (value === undefined || value === null) return "";
+
+            var method = formats[options.format];
+            return value[method]();
+        },
+        convertFrom: function (value, options) {
             if (isEmpty(value)) return undefined;
 
             value = new Date(value);
@@ -22,12 +28,6 @@
             }
 
             return value;
-        },
-        convertFrom: function (value, options) {
-            if (value === undefined || value === null) return "";
-
-            var method = formats[options.format];
-            return value[method]();
         }
     });
 })();

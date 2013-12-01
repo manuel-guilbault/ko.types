@@ -62,6 +62,7 @@
   <ItemGroup>
     <Content Include="build\footer.js" />
     <Content Include="build\header.js" />
+    <Content Include="demo\index.html" />
     <Content Include="gruntfile.js" />
     <Content Include="test\jasmineExtensions.js" />
     <Content Include="src\converters\stringToBoolean.js" />
