@@ -26,7 +26,7 @@ stringWrapper(); // returns "99"
 
 //write converted value
 stringWrapper("test"); // update is not propagated, because "test" is invalid
-stringWrapper('12!!!'); // intValue() = 12
+stringWrapper("12!!!"); // intValue() = 12
 
 //create a string converter bound to a type-save observable, using strict parsing
 var strictStringWrapper = intValue.extend({ convert: { toType: "string", strict: true } });
