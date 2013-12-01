@@ -325,6 +325,9 @@ ko.extenders.convert = function (target, settings) {
     options = ko.utils.extend(baseOptions, options);
 
     var converted = ko.observable(options.convertTo(target(), options));
+    target.subscribe(function (value) {
+        converted(options.convertTo(target(), options));
+    });
     converted.subscribe(function (value) {
         var isValid = true;
         

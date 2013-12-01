@@ -10,28 +10,31 @@ License: [MIT](http://www.opensource.org/licenses/mit-license.php)
 ###NPM: [ko.types](https://npmjs.org/package/ko.types)
 -->
 
+It can be sometimes painfull to have to deal with type conversion with knockout. For example, it is sometimes
+impossible to use the ko.mapping plugin on some viewmodels, because you want to pass the result to an AJAX
+call, and you need to make sure some properties are converted to the right type before being serialized
+as JSON. This plugin makes it easy to make some observables type-safe, and also allows you to easily
+wrap converter observables around your type-safe observables.
+
 ##Getting Started
 ```javascript
-//enforce an observable's value type
-var intValue = ko.observable(1).extend({ type: "integer" });
-intValue(12); // intValue() = 12
-intValue("test"); // throws a TypeError exception
+//enforce an observable's value type to [moment](http://momentjs.com/) objects
+var value = ko.observable(moment()).extend({ type: "moment" });
+value(moment().add('days', -1)); // value() will return yesterday's date
+value("test"); // throws a TypeError exception
 
-//create a string converter bound to a type-safe observable
-var stringWrapper = intValue.extend({ convert: "string" });
+//create a string converter bound to the type-safe observable, formatting with LT (local time).
+//No need to specify the source type; it is detected from the type-safe observable.
+var converted = value.extend({ convert: { toType: "string", format: "LT" } });
+converted(); // returns current time as a string
 
 //read converted value
-intValue(99);
-stringWrapper(); // returns "99"
+value(moment().add('hour', 1));
+converted(); // returns current time plus one hour as a string
 
 //write converted value
-stringWrapper("test"); // update is not propagated, because "test" is invalid
-stringWrapper("12!!!"); // intValue() = 12
-
-//create a string converter bound to a type-save observable, using strict parsing
-var strictStringWrapper = intValue.extend({ convert: { toType: "string", strict: true } });
-strictStringWrapper("12 !!!"); // update is not propagated, because strict parsing is enabled
-strictStringWrapper("12"); // intValue() = 12
+converted("test"); // update is not propagated, because "test" is invalid
+converted("3:05 AM"); // value() returns today at 3:05 AM, as a moment object
 ```
 
 Check the [wiki](https://github.com/manuel-guilbault/ko.types/wiki) for more.
