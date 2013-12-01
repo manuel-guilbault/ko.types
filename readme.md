@@ -35,3 +35,5 @@ var strictStringWrapper = intValue.extend({ convert: { toType: 'string', strict:
 strictStringWrapper('12 !!!'); // update is not propagated, because strict parsing is enabled
 strictStringWrapper('12'); // intValue() = 12
 ```
+
+Check the [wiki](wiki) for more.
