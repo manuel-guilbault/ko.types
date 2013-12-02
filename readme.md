@@ -1,40 +1,37 @@
-﻿#Knockout Types
-A knockout plugin for restricting observables types and bind observables for automatic value type conversion.
+#Get started
+##Conversion
+Let's create an observable containing a [moment](http://momentjs.com/) object, then create a bounded
+converter to format the value using LL format (long date), for french culture (see [moment doc](http://momentjs.com/docs/#/displaying/format/) for other formats).
 
-Author: [Manuel Guilbault](https://github.com/manuel-guilbault)
-
-License: [MIT](http://www.opensource.org/licenses/mit-license.php)
-
-<!---
-###NuGet: [ko.types](http://nuget.org/packages/ko.types)
-###NPM: [ko.types](https://npmjs.org/package/ko.types)
--->
-
-It can be sometimes painfull to have to deal with type conversion with knockout. For example, it is sometimes
-impossible to use the ko.mapping plugin on some viewmodels, because you want to pass the result to an AJAX
-call, and you need to make sure some properties are converted to the right type before being serialized
-as JSON. This plugin makes it easy to make some observables type-safe, and also allows you to easily
-wrap converter observables around your type-safe observables.
-
-##Getting Started
 ```javascript
-//enforce an observable's value type to [moment](http://momentjs.com/) objects
-var value = ko.observable(moment()).extend({ type: "moment" });
-value(moment().add('days', -1)); // value() will return yesterday's date
-value("test"); // throws a TypeError exception
-
-//create a string converter bound to the type-safe observable, formatting with LT (local time).
-//No need to specify the source type; it is detected from the type-safe observable.
-var converted = value.extend({ convert: { toType: "string", format: "LT" } });
-converted(); // returns current time as a string
-
-//read converted value
-value(moment().add('hour', 1));
-converted(); // returns current time plus one hour as a string
-
-//write converted value
-converted("test"); // update is not propagated, because "test" is invalid
-converted("3:05 AM"); // value() returns today at 3:05 AM, as a moment object
+var date = ko.observable(moment());
+var viewModel = {
+    date: date,
+    displayDate: date.extend({ convert: { fromType: 'moment', toType: 'string', format: 'LL', language: 'fr' } })
+};
+ko.applyBindings(viewModel);
 ```
 
-Check the [wiki](https://github.com/manuel-guilbault/ko.types/wiki) for more.
+Now whatever moment value you write to ```viewModel.date```, ```viewModel.displayDate```'s value will be this moment converted to string. Of course, change notifications are propagated, which means that any subscriptions listening to ```viewModel.displayDate``` will be notified if ```viewModel.date``` changes.
+
+But wait - there's more! Converter observables work both ways, so you can bind an input to ```viewModel.displayDate```, and use the parsed value by reading ```viewModel.date```.
+
+There's a bunch of built-in [converters](Converters), check them out.
+
+Also, check the [knockout validation integration](ko.validation) for automatic error messages when a conversion error occurs.
+
+##Type restrictions
+When writing reusable modules, it might be a good idea in some circumstances to prevent users (that is, developers using your piece of code) from using the wrong type on the wrong observable. The type extender does this. Simply extend an observable for a given type:
+```javascript
+var viewModel = {
+    date: ko.observable().extend({ type: 'moment' })
+};
+```
+Try to set a moment object to ```viewModel.date```: everything's fine. Try to set anything else (except ```null``` or ```undefined```, which are okay) and a TypeError will be thrown.
+
+As a bonus, if you create a converter observable from a type-restricted observable, you don't need to specify the ```fromType``` argument: the ```convert``` extender will detect it automatically.
+
+There's a bunch of built-in [types](Types), check them out.
+
+##API
+Check the [API](API).
