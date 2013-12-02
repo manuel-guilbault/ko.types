@@ -18,7 +18,7 @@ But wait - there's more! Converter observables work both ways, so you can bind a
 
 There's a bunch of built-in [converters](Converters), check them out.
 
-Also, check the [knockout validation integration](ko.validation) for automatic error messages when a conversion error occurs.
+Also, check the [knockout validation integration](ko.validation) for automatic error messages when a value cannot be converted.
 
 ##Type restrictions
 When writing reusable modules, it might be a good idea in some circumstances to prevent users (that is, developers using your piece of code) from using the wrong type on the wrong observable. The type extender does this. Simply extend an observable for a given type:
