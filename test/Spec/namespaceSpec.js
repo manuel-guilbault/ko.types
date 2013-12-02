@@ -1,11 +1,19 @@
 ﻿describe("namespace tests", function () {
     it("can register a type", function () {
         var type = "test";
-        var validator = function(value) {};
+        var settings = { isValid: function (value) { } };
+
+        ko.types.addType(type, settings);
+        
+        expect(ko.types.getType(type)).toBe(settings);
+    });
+    it("can register a type (function only)", function () {
+        var type = "test";
+        var validator = function (value) { };
 
         ko.types.addType(type, validator);
-        
-        expect(ko.types.getType(type)).toBe(validator);
+
+        expect(ko.types.getType(type)).toEqual({ isValid: validator });
     });
     it("can register and retrieve a converter", function () {
         var fromType = "testFrom";

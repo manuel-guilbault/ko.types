@@ -9,3 +9,9 @@ function convertFrom(fromType, toType, value, options) {
     options = ko.utils.extend(settings, options || {});
     return options.convertFrom(value, options);
 }
+
+function isType(type, value, options) {
+    var settings = ko.utils.extend({}, ko.types.getType(type));
+    options = ko.utils.extend(settings, options || {});
+    return options.isValid(value, options);
+}

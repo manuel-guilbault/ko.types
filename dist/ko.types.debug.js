@@ -1,5 +1,5 @@
 /*
-*   ko.types 0.1.0 (2013-12-01)
+*   ko.types 0.1.0 (2013-12-02)
 *   Created by Manuel Guilbault (https://github.com/manuel-guilbault)
 *
 *   Source: https://github.com/manuel-guilbault/ko.types
@@ -51,6 +51,9 @@ ko.utils.extend(exports, {
 ko.types = exports;
 
 function addType(name, validator) {
+    if (typeof validator == 'function') {
+        validator = { isValid: validator };
+    }
     exports.typeValidators[name] = validator;
 }
 
@@ -101,23 +104,41 @@ function clearConverters() {
 function isEmpty(s) {
     return (/^\s*$/).test(s);
 }
-exports.addType("boolean", function (value) {
-    return value === null || value === undefined || typeof value === "boolean";
+exports.addType("boolean", {
+    required: false,
+    isValid: function (value, options) {
+        return (!options.required && (value === null || value === undefined)) || typeof value === "boolean";
+    }
 });
-exports.addType("date", function (value) {
-    return value === null || value === undefined || Object.prototype.toString.call(value) === "[object Date]";
+exports.addType("date", {
+    required: false,
+    isValid: function (value, options) {
+        return (!options.required && (value === null || value === undefined)) || Object.prototype.toString.call(value) === "[object Date]";
+    }
 });
-exports.addType("integer", function (value) {
-    return value === null || value === undefined || (typeof value === "number" && value % 1 === 0);
+exports.addType("integer", {
+    required: false,
+    isValid: function (value, options) {
+        return (!options.required && (value === null || value === undefined)) || (typeof value === "number" && value % 1 === 0);
+    }
 });
-exports.addType("moment", function (value) {
-    return value === null || value === undefined || moment.isMoment(value);
+exports.addType("moment", {
+    required: false,
+    isValid: function (value, options) {
+        return (!options.required && (value === null || value === undefined)) || moment.isMoment(value);
+    }
 });
-exports.addType("number", function (value) {
-    return value === null || value === undefined || typeof value === "number";
+exports.addType("number", {
+    required: false,
+    isValid: function (value, options) {
+        return (!options.required && (value === null || value === undefined)) || typeof value === "number";
+    }
 });
-exports.addType("string", function (value) {
-    return value === null || value === undefined || typeof value === "string";
+exports.addType("string", {
+    required: false,
+    isValid: function (value, options) {
+        return (!options.required && (value === null || value === undefined)) || typeof value === "string";
+    }
 });
 exports.addConverter("boolean", "string", {
     strict: false,
@@ -377,13 +398,16 @@ error if the wrong data type is passed.
 //TODO allow to integrate with knockout.validation and set to invalid instead of throwing an error ??
 **/
 ko.extenders.type = function (target, settings) {
-    var validator, dataType;
+    var options, dataType;
     if (typeof settings == "string") {
-        validator = exports.getType(settings);
+        options = exports.getType(settings);
         dataType = settings;
+    } else if (typeof settings == "function") {
+        options = {
+            isValid: settings
+        };
     } else {
-        validator = settings;
-        dataType = undefined;
+        options = settings;
     }
 
     var result = ko.computed({
@@ -391,7 +415,7 @@ ko.extenders.type = function (target, settings) {
             return target();
         },
         write: function (value) {
-            if (!validator(value)) {
+            if (!options.isValid(value)) {
                 if (dataType) {
                     throw new TypeError("Invalid type : expected " + dataType + ".");
                 } else {

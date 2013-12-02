@@ -1,3 +1,6 @@
-﻿exports.addType("string", function (value) {
-    return value === null || value === undefined || typeof value === "string";
+﻿exports.addType("string", {
+    required: false,
+    isValid: function (value, options) {
+        return (!options.required && (value === null || value === undefined)) || typeof value === "string";
+    }
 });

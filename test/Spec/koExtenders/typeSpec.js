@@ -43,7 +43,7 @@
         });
         it("can write valid value", function () {
             var testValidator = jasmine.createSpy("testValidator").andReturn(true);
-            var observable = ko.observable(9).extend({ type: testValidator });
+            var observable = ko.observable(9).extend({ type: { isValid: testValidator } });
 
             var newValue = 12;
             observable(newValue);
@@ -52,6 +52,24 @@
             expect(testValidator).toHaveBeenCalledWith(newValue);
         });
         it("cannot write invalid value", function () {
+            var testValidator = jasmine.createSpy("testValidator").andReturn(false);
+            var observable = ko.observable(9).extend({ type: { isValid: testValidator } });
+            var newValue = "invalidValue";
+
+            expect(function () { observable(newValue); }).toThrow(new TypeError("Invalid type."));
+            expect(testValidator).toHaveBeenCalledWith(newValue);
+        });
+        it("can write valid value (function only)", function () {
+            var testValidator = jasmine.createSpy("testValidator").andReturn(true);
+            var observable = ko.observable(9).extend({ type: testValidator });
+
+            var newValue = 12;
+            observable(newValue);
+
+            expect(observable()).toBe(newValue);
+            expect(testValidator).toHaveBeenCalledWith(newValue);
+        });
+        it("cannot write invalid value (function only)", function () {
             var testValidator = jasmine.createSpy("testValidator").andReturn(false);
             var observable = ko.observable(9).extend({ type: testValidator });
             var newValue = "invalidValue";

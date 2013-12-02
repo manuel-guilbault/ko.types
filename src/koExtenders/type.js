@@ -6,13 +6,16 @@ error if the wrong data type is passed.
 //TODO allow to integrate with knockout.validation and set to invalid instead of throwing an error ??
 **/
 ko.extenders.type = function (target, settings) {
-    var validator, dataType;
+    var options, dataType;
     if (typeof settings == "string") {
-        validator = exports.getType(settings);
+        options = exports.getType(settings);
         dataType = settings;
+    } else if (typeof settings == "function") {
+        options = {
+            isValid: settings
+        };
     } else {
-        validator = settings;
-        dataType = undefined;
+        options = settings;
     }
 
     var result = ko.computed({
@@ -20,7 +23,7 @@ ko.extenders.type = function (target, settings) {
             return target();
         },
         write: function (value) {
-            if (!validator(value)) {
+            if (!options.isValid(value)) {
                 if (dataType) {
                     throw new TypeError("Invalid type : expected " + dataType + ".");
                 } else {

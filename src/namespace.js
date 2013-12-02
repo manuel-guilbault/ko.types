@@ -29,6 +29,9 @@ ko.utils.extend(exports, {
 ko.types = exports;
 
 function addType(name, validator) {
+    if (typeof validator == 'function') {
+        validator = { isValid: validator };
+    }
     exports.typeValidators[name] = validator;
 }
 
