@@ -64,6 +64,7 @@
     <Content Include="build\header.js" />
     <Content Include="demo\index.html" />
     <Content Include="gruntfile.js" />
+    <Content Include="src\converters\booleanToAny.js" />
     <Content Include="src\converters\booleanToString.js" />
     <Content Include="src\converters\dateToString.js" />
     <Content Include="src\converters\globalizedDateToString.js" />
@@ -71,6 +72,8 @@
     <Content Include="src\converters\integerToString.js" />
     <Content Include="src\converters\momentToString.js" />
     <Content Include="src\converters\numberToString.js" />
+    <Content Include="src\converters\stringToAny.js" />
+    <Content Include="src\utils.js" />
     <Content Include="test\jasmineExtensions.js" />
     <Content Include="src\koExtenders\convert.js" />
     <Content Include="src\koExtenders\type.js" />
@@ -82,6 +85,7 @@
     <Content Include="src\types\number.js" />
     <Content Include="src\types\string.js" />
     <Content Include="test\convertHelper.js" />
+    <Content Include="test\Spec\converters\booleanToAnySpec.js" />
     <Content Include="test\Spec\converters\booleanToStringSpec.js" />
     <Content Include="test\Spec\converters\dateToStringSpec.js" />
     <Content Include="test\Spec\converters\globalizedDateToStringSpec.js" />
@@ -89,6 +93,7 @@
     <Content Include="test\Spec\converters\integerToStringSpec.js" />
     <Content Include="test\Spec\converters\momentToStringSpec.js" />
     <Content Include="test\Spec\converters\numberToStringSpec.js" />
+    <Content Include="test\Spec\converters\stringToAnySpec.js" />
     <Content Include="test\Spec\koExtenders\convertSpec.js" />
     <Content Include="test\Spec\koExtenders\typeSpec.js" />
     <Content Include="test\Spec\namespaceSpec.js" />
@@ -98,6 +103,7 @@
     <Content Include="test\Spec\types\momentSpec.js" />
     <Content Include="test\Spec\types\numberSpec.js" />
     <Content Include="test\Spec\types\stringSpec.js" />
+    <Content Include="test\Spec\utilsSpec.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="dist\" />

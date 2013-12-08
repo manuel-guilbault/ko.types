@@ -1,5 +1,5 @@
 /*
-*   ko.types 0.1.0 (2013-12-03)
+*   ko.types 0.1.0 (2013-12-08)
 *   Created by Manuel Guilbault (https://github.com/manuel-guilbault)
 *
 *   Source: https://github.com/manuel-guilbault/ko.types
@@ -104,6 +104,16 @@ function clearConverters() {
 function isEmpty(s) {
     return (/^\s*$/).test(s);
 }
+ko.utils.extend(exports, {
+    utils: {
+        escapeRegExp: escapeRegExp
+    }
+});
+
+function escapeRegExp(str) {
+    // See http://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+}
 exports.addType("boolean", {
     required: false,
     isValid: function (value, options) {
@@ -140,26 +150,51 @@ exports.addType("string", {
         return (!options.required && (value === null || value === undefined)) || typeof value === "string";
     }
 });
-exports.addConverter("boolean", "string", {
-    strict: false,
-    message: "Invalid boolean value.",
+exports.addConverter("boolean", "*", {
     convertTo: function (value, options) {
-        return value !== undefined && value !== null ? value.toString() : "";
+        return value;
     },
     convertFrom: function (value, options) {
-        if (options.strict) {
+        return !!value;
+    }
+});
+(function() {
+    function compileValuesExpr(values) {
+        var escapedValues = [];
+        for (var i = 0; i < values.length; ++i) {
+            escapedValues.push(exports.utils.escapeRegExp(values[i]));
+        }
+        return escapedValues.join("|");
+    }
+
+    function compileExpr(trueValues, falseValues) {
+        return new RegExp("^\\s*((" + compileValuesExpr(trueValues) + ")|(" + compileValuesExpr(falseValues) + "))\\s*$", "i");
+    }
+
+    exports.addConverter("boolean", "string", {
+        trueValues: ["true"],
+        falseValues: ["false"],
+        message: "Invalid boolean value.",
+        convertTo: function (value, options) {
+            if (value === undefined || value === null) {
+                return "";
+            } else {
+                return value ? options.trueValues[0] : options.falseValues[0];
+            }
+        },
+        convertFrom: function (value, options) {
             if (isEmpty(value)) return undefined;
 
-            var matches = /^\s*(true|false)\s*$/i.exec(value);
+            var expression = compileExpr(options.trueValues, options.falseValues);
+            var matches = expression.exec(value);
             if (matches === null) {
                 throw new TypeError("Invalid boolean value.");
             }
-            return matches[1].toLowerCase() === "true";
-        } else {
-            return !!value;
+
+            return matches[2] !== undefined;
         }
-    }
-});
+    });
+})();
 (function () {
     var formats = {
         "date": "toDateString",
@@ -300,6 +335,18 @@ exports.addConverter("number", "string", {
         return value;
     }
 });
+exports.addConverter("string", "*", {
+    convertTo: function (value, options) {
+        return value;
+    },
+    convertFrom: function (value, options) {
+        if (value === null || value === undefined) {
+            return "";
+        } else {
+            return value.toString();
+        }
+    }
+});
 /**
     observable.extend({ convert: string });
 
@@ -329,21 +376,27 @@ Additionally, those options can be passed:
 ko.extenders.convert = function (target, settings) {
     var options = settings;
     if (typeof options == "string") {
-        if (!target.dataType) throw new Error("fromType is missing");
-
-        options = { fromType: target.dataType, toType: options };
-    } else if (!options.fromType && target.dataType) {
-        options.fromType = target.dataType;
+        options = { toType: options };
+    } else if (typeof options != "object") {
+        throw new TypeError("settings must be either a string or an object");
     }
+    
+    if (!options.convertTo || !options.convertFrom) {
+        options.fromType = options.fromType || target.dataType || "*";
+        options.toType = options.toType || "*";
 
-    if (options.fromType && options.toType) {
+        if (options.fromType == "*" && options.toType == "*") {
+            throw new Error("fromType and toType cannot be both '*'");
+        }
+
         baseOptions = exports.getConverter(options.fromType, options.toType);
-        delete options.fromType;
-        delete options.toType;
-    } else {
-        baseOptions = {};
+        if (baseOptions === undefined) {
+            throw new Error("converter not found (fromType: " + options.fromType + ", toType: " + options.toType + ")");
+        }
+
+        baseOptions = ko.utils.extend({}, baseOptions);
+        options = ko.utils.extend(baseOptions, options);
     }
-    options = ko.utils.extend(baseOptions, options);
 
     var converted = ko.observable(options.convertTo(target(), options));
     target.subscribe(function (value) {

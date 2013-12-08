@@ -15,24 +15,24 @@
     });
 
     describe("convert from", function () {
-        it("can convert string to undefined (strict)", function () {
-            expect(convertFrom("boolean", "string", "", { "strict": true })).toBe(undefined);
+        it("can convert string to undefined", function () {
+            expect(convertFrom("boolean", "string", "")).toBe(undefined);
         });
-        it("can convert string to true (strict)", function () {
-            expect(convertFrom("boolean", "string", "true", { "strict": true })).toBe(true);
+        it("can convert string to true", function () {
+            expect(convertFrom("boolean", "string", "true")).toBe(true);
         });
-        it("can convert string to false (strict)", function () {
-            expect(convertFrom("boolean", "string", "false", { "strict": true })).toBe(false);
+        it("can convert string to false", function () {
+            expect(convertFrom("boolean", "string", "false")).toBe(false);
         });
-        it("can convert string to true (not strict)", function () {
-            expect(convertFrom("boolean", "string", "something")).toBe(true);
+        it("can convert string to true (with overwritten value)", function () {
+            expect(convertFrom("boolean", "string", "Yes", { trueValues: ["yes"], falseValues: ["no"] })).toBe(true);
         });
-        it("can convert string to false (not strict)", function () {
-            expect(convertFrom("boolean", "string", "")).toBe(false);
+        it("can convert string to false (with overwritten value)", function () {
+            expect(convertFrom("boolean", "string", "No", { trueValues: ["yes"], falseValues: ["no"] })).toBe(false);
         });
-        it("cannot convert invalid string to boolean (strict)", function () {
+        it("cannot convert invalid string to boolean", function () {
             expect(function () {
-                convertFrom("boolean", "string", "test", { "strict": true });
+                convertFrom("boolean", "string", "test");
             }).toThrow(new TypeError("Invalid boolean value."));
         });
     });

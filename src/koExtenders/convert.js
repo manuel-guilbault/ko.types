@@ -27,21 +27,27 @@ Additionally, those options can be passed:
 ko.extenders.convert = function (target, settings) {
     var options = settings;
     if (typeof options == "string") {
-        if (!target.dataType) throw new Error("fromType is missing");
-
-        options = { fromType: target.dataType, toType: options };
-    } else if (!options.fromType && target.dataType) {
-        options.fromType = target.dataType;
+        options = { toType: options };
+    } else if (typeof options != "object") {
+        throw new TypeError("settings must be either a string or an object");
     }
+    
+    if (!options.convertTo || !options.convertFrom) {
+        options.fromType = options.fromType || target.dataType || "*";
+        options.toType = options.toType || "*";
 
-    if (options.fromType && options.toType) {
+        if (options.fromType == "*" && options.toType == "*") {
+            throw new Error("fromType and toType cannot be both '*'");
+        }
+
         baseOptions = exports.getConverter(options.fromType, options.toType);
-        delete options.fromType;
-        delete options.toType;
-    } else {
-        baseOptions = {};
+        if (baseOptions === undefined) {
+            throw new Error("converter not found (fromType: " + options.fromType + ", toType: " + options.toType + ")");
+        }
+
+        baseOptions = ko.utils.extend({}, baseOptions);
+        options = ko.utils.extend(baseOptions, options);
     }
-    options = ko.utils.extend(baseOptions, options);
 
     var converted = ko.observable(options.convertTo(target(), options));
     target.subscribe(function (value) {

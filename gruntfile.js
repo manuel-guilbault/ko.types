@@ -26,6 +26,7 @@
                     bannerSrc,
                     "build/header.js",
                     "src/namespace.js",
+                    "src/utils.js",
                     "src/types/*.js",
                     "src/converters/*.js",
                     "src/koExtenders/*.js",
@@ -52,6 +53,7 @@
         },
         jasmine: {
             options: {
+                //keepRunner: true,
                 vendor: [
                     "node_modules/knockout/build/output/knockout-latest.js",
                     "node_modules/knockout.validation/Dist/knockout.validation.js",
