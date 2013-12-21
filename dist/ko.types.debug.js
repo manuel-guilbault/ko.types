@@ -1,5 +1,5 @@
 /*
-*   ko.types 0.1.0 (2013-12-08)
+*   ko.types 0.1.0 (2013-12-21)
 *   Created by Manuel Guilbault (https://github.com/manuel-guilbault)
 *
 *   Source: https://github.com/manuel-guilbault/ko.types
@@ -289,6 +289,18 @@ exports.addConverter("integer", "string", {
         }
 
         return value;
+    }
+});
+exports.addConverter("moment", "date", {
+    convertTo: function (value, options) {
+        if (value === undefined || value === null) return value;
+
+        return value.toDate();
+    },
+    convertFrom: function (value, options) {
+        if (value === undefined || value === null) return value;
+
+        return moment(value);
     }
 });
 exports.addConverter("moment", "string", {

@@ -70,6 +70,7 @@
     <Content Include="src\converters\globalizedDateToString.js" />
     <Content Include="src\converters\globalizedNumberToString.js" />
     <Content Include="src\converters\integerToString.js" />
+    <Content Include="src\converters\momentToDate.js" />
     <Content Include="src\converters\momentToString.js" />
     <Content Include="src\converters\numberToString.js" />
     <Content Include="src\converters\stringToAny.js" />
@@ -91,6 +92,7 @@
     <Content Include="test\Spec\converters\globalizedDateToStringSpec.js" />
     <Content Include="test\Spec\converters\globalizedNumberToStringSpec.js" />
     <Content Include="test\Spec\converters\integerToStringSpec.js" />
+    <Content Include="test\Spec\converters\momentToDateSpec.js" />
     <Content Include="test\Spec\converters\momentToStringSpec.js" />
     <Content Include="test\Spec\converters\numberToStringSpec.js" />
     <Content Include="test\Spec\converters\stringToAnySpec.js" />
