@@ -16,7 +16,7 @@ Now whatever moment value you write to ```viewModel.date```, ```viewModel.displa
 
 But wait - there's more! Converter observables work both ways, so you can bind an input to ```viewModel.displayDate```, and use the parsed value by reading ```viewModel.date```.
 
-There's a bunch of built-in [converters](Converters), check them out.
+There's a bunch of built-in [converters](wiki/Converters), check them out.
 
 Also, check the [knockout validation integration](ko.validation) for automatic error messages when a value cannot be converted.
 
