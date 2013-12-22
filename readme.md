@@ -16,9 +16,9 @@ Now whatever moment value you write to ```viewModel.date```, ```viewModel.displa
 
 But wait - there's more! Converter observables work both ways, so you can bind an input to ```viewModel.displayDate```, and use the parsed value by reading ```viewModel.date```.
 
-There's a bunch of built-in [converters](wiki/Converters), check them out.
+There's a bunch of built-in [converters](https://github.com/manuel-guilbault/ko.types/wiki/Converters), check them out.
 
-Also, check the [knockout validation integration](ko.validation) for automatic error messages when a value cannot be converted.
+Also, check the [knockout validation integration](https://github.com/manuel-guilbault/ko.types/wiki/ko.validation) for automatic error messages when a value cannot be converted.
 
 ##Type restrictions
 When writing reusable modules, it might be a good idea in some circumstances to prevent users (that is, developers using your piece of code) from using the wrong type on the wrong observable. The type extender does this. Simply extend an observable for a given type:
@@ -31,7 +31,7 @@ Try to set a moment object to ```viewModel.date```: everything's fine. Try to se
 
 As a bonus, if you create a converter observable from a type-restricted observable, you don't need to specify the ```fromType``` argument: the ```convert``` extender will detect it automatically.
 
-There's a bunch of built-in [types](Types), check them out.
+There's a bunch of built-in [types](https://github.com/manuel-guilbault/ko.types/wiki/Types), check them out.
 
 ##API
-Check the [API](API).
+Check the [API](https://github.com/manuel-guilbault/ko.types/wiki/API).
